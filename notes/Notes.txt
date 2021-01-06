@@ -1,0 +1,29 @@
+Generation: 300
+Elapsed time: 9460
+Deme: 0
+Evaluations: 15050
+Stats: fitness
+        max: 51057.8
+        min: 39954.5
+        avg: 44387.2
+        stdev: 2777.13
+popsize = 50
+imgsize = 700
+
+
+
+<RouletteWheel>
+                <Entry key="crxprob">0.5</Entry>    
+                <Entry key="selpressure">10</Entry>     
+        </RouletteWheel>
+Generation: 300
+Elapsed time: 7145
+Deme: 0
+Evaluations: 10486
+Stats: fitness
+        max: 67242
+        min: 39572.5
+        avg: 46785.8
+        stdev: 5615.77
+popsize = 50
+imgsize = 700

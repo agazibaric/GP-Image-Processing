@@ -1,0 +1,14 @@
+accuracy: 0.0483871
+minFitness: 39272.3
+maxFitness: 47808.4
+average: 42657.5
+stdDev: 1802.87
+sampleSize: 50
+time: 6998
+evaluations: 10050
+generations: 10050
+lowest: 39272.3
+highest: 128233
+
+
+50 * 1

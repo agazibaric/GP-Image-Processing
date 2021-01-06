@@ -1,0 +1,10 @@
+<RouletteWheel>
+                <Entry key="crxprob">0.5</Entry>    
+                <Entry key="selpressure">10</Entry>     
+        </RouletteWheel>
+        <SteadyStateTournament>
+			<Entry key="tsize">3</Entry>
+		</SteadyStateTournament>
+
+
+        ln exp step min max sq_exp ceil floor rec frac sigm abs rsqrt ramp neg
