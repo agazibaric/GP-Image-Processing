@@ -1,6 +1,6 @@
 #ifndef CARTESIAN_MUTFUNCTIONSILENT_H
 #define CARTESIAN_MUTFUNCTIONSILENT_H
-#include "ecf/ECF_base.h"
+#include <ECF/ECF_base.h>
 #include "../utility/utilityrng.h"
 namespace cartesian{
     class MutateFunctionSilent : public MutationOp

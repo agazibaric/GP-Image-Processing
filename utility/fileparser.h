@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "ecf/ECF_base.h"
+#include <ECF/ECF_base.h>
 
 namespace utility{
     using PairAllFeaturesAllLabels = std::pair<std::vector<std::vector<double>>,std::vector<uint>>;

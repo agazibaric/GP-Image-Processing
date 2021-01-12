@@ -10,7 +10,7 @@ bool AdversarialOp::initialize(StateP)
 	this->target = 5;
 	//this->fakeTarget = 6;
 	// Load MNIST data that represents target number
-	auto data = MNIST::loadTargetData(this->target);
+	//auto data = MNIST::loadTargetData(this->target);
 
 	// FOR NOISED TRAINING
 	//std::uniform_real_distribution<double> dist(0, 1);
@@ -37,7 +37,8 @@ bool AdversarialOp::initialize(StateP)
 	//}
 
 	// FOR MOTION BLUR TRAINING
-	auto originalImage = data[0];
+
+	auto originalImage = MNIST::loadImageFromVector("./data/mnist-vec/5/0.txt");
 	MNIST::scale(originalImage, 255);
 
 	auto trainingImage = MNIST::loadImageFromVector("blured-vert.txt");

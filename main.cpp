@@ -1,13 +1,13 @@
-#include <ecf/ECF.h>
+#include <ECF/ECF.h>
 #include "cartesian/Cartesian.h"
 #include "AdversarialOp.h"
 #include <iostream>
 
 #include <algorithm>
 #include <functional>
-#include <Mnist.h>
+#include "Mnist.h"
 
-void writeInfo(const char* fileName, vector<vector<double>> testData, StateP state, shared_ptr<Net> targetModel, int targetValue) {
+/*void writeInfo(const char* fileName, vector<vector<double>> testData, StateP state, shared_ptr<Net> targetModel, int targetValue) {
     ofstream file;
     file.open(fileName);
 
@@ -41,7 +41,7 @@ void writeInfo(const char* fileName, vector<vector<double>> testData, StateP sta
 
     //free(bestModel);
     file.close();
-}
+}*/
 
 int main(int argc, char** argv) {
     StateP state(new State);

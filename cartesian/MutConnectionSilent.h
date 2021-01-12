@@ -1,6 +1,6 @@
 #ifndef CARTESIAN_MUTCONNECTIONSILENT_H
 #define CARTESIAN_MUTCONNECTIONSILENT_H
-#include "ecf/ECF_base.h"
+#include <ECF/ECF_base.h>
 #include "../utility/utilityrng.h"
 namespace cartesian{
     class MutateConnectionSilent : public MutationOp

@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include <torch/torch.h>
 
 struct Net : torch::nn::Module {
@@ -28,4 +28,4 @@ struct Net : torch::nn::Module {
     torch::nn::Conv2d conv2{ nullptr };
     torch::nn::Dropout2d conv2_drop{ nullptr };
     torch::nn::Linear fc1{ nullptr }, fc2{ nullptr };
-};
+};*/
