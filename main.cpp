@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 
     vector<double> image = adversarialOp->training_data[0];
     vector<double> generatedImage;
-    MNIST::convolution(image, generatedImage, MNIST::IMG_WIDTH, MNIST::IMG_HEIGHT, bestModel, 5);
+    MNIST::convolution(image, generatedImage, MNIST::IMG_WIDTH, MNIST::IMG_HEIGHT, bestModel, 3, 1.);
     MNIST::fixInvalidValues(generatedImage);
     MNIST::writeToFile("Denoised.txt", generatedImage);
     

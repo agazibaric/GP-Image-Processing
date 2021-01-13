@@ -14,8 +14,8 @@ using namespace std;
 class MNIST
 {
 public:
-    static constexpr int IMG_WIDTH = 28;
-    static constexpr int IMG_HEIGHT = 28;
+    static constexpr int IMG_WIDTH = 512;
+    static constexpr int IMG_HEIGHT = 512;
 
     static constexpr double MEAN = 0.13707;
     static constexpr double STD = 0.3081;
@@ -48,12 +48,13 @@ public:
     }*/
 
     static void convolution(vector<double> image, vector<double>& generatedImage, 
-        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize) {
+        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, float percentage) {
         int delta = convolutionSize / 2;;
-        for (int j = 0, imageSize = image.size(); j < imageSize; j++) {
+        int imageSize = (int)(image.size() * percentage);
+        for (int j = 0; j < imageSize; j++) {
             // 3 x 3 convolution
-            int pixelRow = j / 28;
-            int pixelCol = j % 28;
+            int pixelRow = j / MNIST::IMG_WIDTH;
+            int pixelCol = j % MNIST::IMG_HEIGHT;
             vector<double> convolutionInputs;
             for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
                 for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
