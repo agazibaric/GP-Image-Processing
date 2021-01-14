@@ -8,8 +8,8 @@
 		<Cartesian>
 			<Entry key="numvariables">8</Entry>
 			<Entry key="numoutputs">1</Entry>
-			<Entry key="numrows">40</Entry>
-			<Entry key="numcols">2lenna-noised.txt</Entry>
+			<Entry key="numrows">50</Entry>
+			<Entry key="numcols">3lenna-noised.txt</Entry>
 			<Entry key="levelsback">40</Entry>
 			<Entry key="functionset">+ - * / sin cos nop sqrt exp step neg avg min max abs add ramp</Entry>
 			<Entry key="constantset">0 1 -1 255 -255</Entry>
@@ -19,8 +19,8 @@
 	<Registry>
 		<Entry key="mutation.indprob">0.1</Entry>
 
-		<Entry key="population.size">10</Entry>
-		<Entry key="term.maxgen">1000</Entry>
+		<Entry key="population.size">20</Entry>
+		<Entry key="term.maxgen">10000</Entry>
 		<Entry key="term.fitnessval">0</Entry>
 		<Entry key="log.level">3</Entry>
 		<Entry key="log.frequency">5</Entry>
