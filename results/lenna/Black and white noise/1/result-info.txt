@@ -1,0 +1,2 @@
+FitnessMin value="0.000410915"
+
