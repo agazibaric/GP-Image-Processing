@@ -1,11 +1,11 @@
 #include <ECF/ECF.h>
 #include "cartesian/Cartesian.h"
-#include "AdversarialOp.h"
+#include "ImageProcessingOp.h"
 #include <iostream>
 
 #include <algorithm>
 #include <functional>
-#include "Mnist.h"
+#include "IP.h"
 
 /*void writeInfo(const char* fileName, vector<vector<double>> testData, StateP state, shared_ptr<Net> targetModel, int targetValue) {
     ofstream file;
@@ -15,7 +15,6 @@
     cartesian::Cartesian* bestModel = (cartesian::Cartesian*) best[0]->getGenotype().get();
     vector<double> stats = state->getStats()->getStats(-1);
 
-    double accuracy = MNIST::calcAccuracy(testData, bestModel, targetModel, targetValue);
     double minFitness = stats[0];
     double maxFitness = stats[1];
     double average = stats[2];
@@ -27,7 +26,6 @@
     double lowest = stats[7];
     double highest = stats[8];
 
-    file << "accuracy: " << accuracy << endl;
     file << "minFitness: " << minFitness << endl;
     file << "maxFitness: " << maxFitness << endl;
     file << "average: " << average << endl;
@@ -48,35 +46,35 @@ int main(int argc, char** argv) {
     CartesianP cgp(new cartesian::Cartesian);
     state->addGenotype(cgp);
 
-    AdversarialOpP adversarialOp(new AdversarialOp());
-    state->setEvalOp(adversarialOp);
+    ImageProcessingOpP ipOp(new ImageProcessingOp());
+    state->setEvalOp(ipOp);
     state->initialize(argc, argv);
     state->run();
 
     vector<IndividualP> best = state->getHoF()->getBest();
     cartesian::Cartesian* bestModel = (cartesian::Cartesian*) best[0]->getGenotype().get();
 
-    MNIST::writeToFile("Noised.txt", adversarialOp->training_data[0]);
+    IP::writeToFile("Noised.txt", ipOp->training_data[0]);
 
-    vector<double> image = adversarialOp->training_data[0];
+    vector<double> image = ipOp->training_data[0];
     vector<double> generatedImage;
-    MNIST::convolution(image, generatedImage, MNIST::IMG_WIDTH, MNIST::IMG_HEIGHT, bestModel, 3, 1.);
-    MNIST::fixInvalidValues(generatedImage);
-    MNIST::writeToFile("Denoised.txt", generatedImage);
+    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 3, 1.);
+    IP::fixInvalidValues(generatedImage);
+    IP::writeToFile("Denoised.txt", generatedImage);
     
-    //auto testData = MNIST::loadTargetData(5);
-    //auto targetModel = adversarialOp->targetModel;
+    //auto testData = IP::loadTargetData(5);
+    //auto targetModel = ImageProcessingOp->targetModel;
     //
     //auto originalImg = testData[1];
     //vector<double> filter;
     //bestModel->evaluate(originalImg, filter);
-    //vector<double> adversarialImage = MNIST::combine(originalImg, filter);
-    //MNIST::fixInvalidValues(adversarialImage);
-    //torch::Tensor tensorAdversarialImg = MNIST::vectorToTensor(adversarialImage);
-    //torch::Tensor normTensorAdversarialImg = MNIST::unNormalize(tensorAdversarialImg);
+    //vector<double> adversarialImage = IP::combine(originalImg, filter);
+    //IP::fixInvalidValues(adversarialImage);
+    //torch::Tensor tensorAdversarialImg = IP::vectorToTensor(adversarialImage);
+    //torch::Tensor normTensorAdversarialImg = IP::unNormalize(tensorAdversarialImg);
 
     //// Write adversarial img to file
-    //MNIST::writeToFile("advImg10.txt", MNIST::tensorToVector(normTensorAdversarialImg));
+    //IP::writeToFile("advImg10.txt", IP::tensorToVector(normTensorAdversarialImg));
 
     //// Write detailed info to file
     //int targetValue = 6;

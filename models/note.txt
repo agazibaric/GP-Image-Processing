@@ -1,6 +1,0 @@
-net1
-conv1 = register_module("conv1", torch::nn::Conv2d(torch::nn::Conv2dOptions(1, 10, 5)));
-        conv2 = register_module("conv2", torch::nn::Conv2d(torch::nn::Conv2dOptions(10, 20, 5)));
-        conv2_drop = register_module("conv2_drop", torch::nn::Dropout2d());
-        fc1 = register_module("fc1", torch::nn::Linear(320, 50));
-        fc2 = register_module("fc2", torch::nn::Linear(50, 10));

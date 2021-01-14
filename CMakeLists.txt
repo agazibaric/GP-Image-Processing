@@ -62,9 +62,9 @@ set(SOURCE_FILES
 	utility/utility.cpp
 	utility/utility.h
 	utility/utilityrng.h
-	AdversarialOp.h
-	AdversarialOp.cpp
-	Mnist.h)
+	ImageProcessingOp.h
+	ImageProcessingOp.cpp
+	IP.h)
 
 find_package(Boost)
 if(Boost_FOUND)
