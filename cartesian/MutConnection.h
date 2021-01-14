@@ -1,6 +1,6 @@
 #ifndef CARTESIAN_MUTCONNECTION_H
 #define CARTESIAN_MUTCONNECTION_H
-#include "ecf/ECF_base.h"
+#include <ECF/ECF_base.h>
 #include "../utility/utilityrng.h"
 namespace cartesian{
     class MutateConnection : public MutationOp

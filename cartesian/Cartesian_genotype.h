@@ -2,8 +2,8 @@
 #define CARTESIAN_GENOTYPE_H
 #include <vector>
 #include <set>
-#include "ecf/ECF_base.h"
-#include "ecf/Genotype.h"
+#include <ECF/ECF_base.h>
+#include <ECF/Genotype.h>
 #include "CartesianGene.h"
 #include "../utility/utilityrng.h"
 namespace cartesian

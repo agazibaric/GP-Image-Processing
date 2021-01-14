@@ -1,6 +1,6 @@
 #ifndef CARTESIAN_MUTFUNCTION_H
 #define CARTESIAN_MUTFUNCTION_H
-#include "ecf/ECF_base.h"
+#include <ECF/ECF_base.h>
 #include "../utility/utilityrng.h"
 namespace cartesian{
     class MutateFunction : public MutationOp

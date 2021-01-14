@@ -1,6 +1,6 @@
 #pragma once
-#include <torch/script.h>
-#include <Net.h>
+//#include <torch/script.h>
+// #include <Net.h>
 
 #include <vector>
 #include <iostream>
@@ -14,8 +14,8 @@ using namespace std;
 class MNIST
 {
 public:
-    static constexpr int IMG_WIDTH = 28;
-    static constexpr int IMG_HEIGHT = 28;
+    static constexpr int IMG_WIDTH = 512;
+    static constexpr int IMG_HEIGHT = 512;
 
     static constexpr double MEAN = 0.13707;
     static constexpr double STD = 0.3081;
@@ -25,7 +25,7 @@ public:
 
     static constexpr double MIN_VALUE = 0;
     static constexpr double MAX_VALUE = 255;
-
+/*
     static vector<double> tensorToVector(torch::Tensor t) {
         vector<float> v(t.data_ptr<float>(), t.data_ptr<float>() + t.numel());
         vector<double> doubleVec(v.begin(), v.end());
@@ -45,15 +45,16 @@ public:
     static torch::Tensor normalize(torch::Tensor tensor) {
         torch::data::transforms::Normalize<> n(MNIST::MEAN, MNIST::STD);
         return n.operator()(tensor);
-    }
+    }*/
 
     static void convolution(vector<double> image, vector<double>& generatedImage, 
-        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize) {
+        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, float percentage) {
         int delta = convolutionSize / 2;;
-        for (int j = 0, imageSize = image.size(); j < imageSize; j++) {
+        int imageSize = (int)(image.size() * percentage);
+        for (int j = 0; j < imageSize; j++) {
             // 3 x 3 convolution
-            int pixelRow = j / 28;
-            int pixelCol = j % 28;
+            int pixelRow = j / MNIST::IMG_WIDTH;
+            int pixelCol = j % MNIST::IMG_HEIGHT;
             vector<double> convolutionInputs;
             for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
                 for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
@@ -80,12 +81,14 @@ public:
 
     static void fixInvalidValues(vector<double>& v) {
         for (int i = 0, n = v.size(); i < n; i++) {
-            v[i] = min(v[i], MNIST::MAX_VALUE);
-            v[i] = max(v[i], MNIST::MIN_VALUE);
+            /*v[i] = min(v[i], MNIST::MAX_VALUE);
+            v[i] = max(v[i], MNIST::MIN_VALUE);*/
+            v[i] = min(v[i], 255.);
+            v[i] = max(v[i], 0.);
         }
     }
 
-    static vector<double> combine(vector<double> a, vector<double> b) {
+    /*static vector<double> combine(vector<double> a, vector<double> b) {
         assert(a.size() == b.size());
 
         std::vector<double> result;
@@ -97,7 +100,7 @@ public:
             std::back_inserter(result), transformFunction);
 
         return result;
-    }
+    }*/
 
     static double euclideanNorm(vector<double> v) {
         //double result = sqrt(inner_product(begin(v), end(v), begin(v), 0));
@@ -123,7 +126,7 @@ public:
         }
     }
 
-    static shared_ptr<Net> loadModel(const char* model_path) {
+    /*static shared_ptr<Net> loadModel(const char* model_path) {
         auto model = make_shared<Net>();
         try {
             torch::load(model, model_path);
@@ -134,7 +137,7 @@ public:
             throw e;
         }
         return model;
-    }
+    }*/
 
     static vector<double> loadImageFromVector(const char* fileName) {
         vector<double> image;
@@ -148,7 +151,7 @@ public:
         return image;
     }
 
-    static vector<std::vector<double>> loadTargetData(int target) {
+    /*static vector<std::vector<double>> loadTargetData(int target) {
         // Create multi-threaded data loader for MNIST data
         auto data_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(
             move(torch::data::datasets::MNIST("./data/mnist")
@@ -170,9 +173,9 @@ public:
             } 
         }
         return filtered;
-    }
+    }*/
 
-    static double calcAccuracy(vector<vector<double>> testData, cartesian::Cartesian* bestModel, shared_ptr<Net> targetModel, int targetValue) {
+    /*static double calcAccuracy(vector<vector<double>> testData, cartesian::Cartesian* bestModel, shared_ptr<Net> targetModel, int targetValue) {
         int count = 0;
         for (vector<double> originalImg : testData) {
             vector<double> filter;
@@ -187,7 +190,7 @@ public:
             }
         }
         return (1. * count) / testData.size();
-    }
+    }*/
 
     static void writeToFile(const char* fileName, vector<double> v) {
         ofstream file;
