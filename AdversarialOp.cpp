@@ -38,10 +38,10 @@ bool AdversarialOp::initialize(StateP)
 
 	// FOR MOTION BLUR TRAINING
 
-	auto originalImage = MNIST::loadImageFromVector("./data/mnist-vec/5/0.txt");
-	MNIST::scale(originalImage, 255);
+	auto originalImage = MNIST::loadImageFromVector("./data/lenna.txt");
+	//MNIST::scale(originalImage, 255);
 
-	auto trainingImage = MNIST::loadImageFromVector("blured-vert.txt");
+	auto trainingImage = MNIST::loadImageFromVector("./data/lenna-noised.txt");
 
 	this->original_images.push_back(originalImage);
 	this->training_data.push_back(trainingImage);
@@ -55,13 +55,14 @@ FitnessP AdversarialOp::evaluate(IndividualP individual)
 	cartesian::Cartesian* cartesian = (cartesian::Cartesian*) individual->getGenotype().get();
 	FitnessP fitness(new FitnessMin);
 	double error = 0.;
+	double percentage = 0.01;
 
 	for (int i = 0, n = training_data.size(); i < n;  i++) {
 		
 		vector<double> image = training_data[i];
 		vector<double> generatedImage;
 
-		MNIST::convolution(image, generatedImage, MNIST::IMG_WIDTH, MNIST::IMG_HEIGHT, cartesian, 5);
+		MNIST::convolution(image, generatedImage, MNIST::IMG_WIDTH, MNIST::IMG_HEIGHT, cartesian, 3, percentage);
 
 		vector<double> result;
 		vector<double> original_image = this->original_images[i];
@@ -70,7 +71,7 @@ FitnessP AdversarialOp::evaluate(IndividualP individual)
 			result.push_back(original_image[pixel] - generatedImage[pixel]);
 		}
 
-		error += MNIST::euclideanNorm(result) / (784. * 255 * 255);
+		error += MNIST::euclideanNorm(result) / (MNIST::IMG_HEIGHT * MNIST::IMG_WIDTH * 255. * 255. * percentage);
 
 		// Black image 
 		//error -= 0.5 * (MNIST::euclideanNorm(generatedImage) / (784. * 255 * 255));
