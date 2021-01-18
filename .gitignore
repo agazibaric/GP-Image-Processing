@@ -38,6 +38,11 @@ log.txt
 Noised.txt
 Denoised.txt
 Original.txt
+info*.txt
+training-image.txt
+original-image.txt
+goal-img.txt
+generated-img.txt
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

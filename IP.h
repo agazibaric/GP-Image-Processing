@@ -19,17 +19,24 @@ public:
     static constexpr double MAX_VALUE = 255;
 
     static void convolution(vector<double> image, vector<double>& generatedImage, 
-        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, float percentage) {
+        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, double percentage, double offset_perc) {
         int delta = convolutionSize / 2;;
         int imageSize = (int)(image.size() * percentage);
-        for (int j = 0; j < imageSize; j++) {
+        int imageOffset = (int)(image.size() * offset_perc);
+
+        int N = imageOffset + imageSize;
+        if (N > image.size()) {
+            N = image.size();
+        }
+
+        for (int j = imageOffset; j < N; j++) {
             int pixelRow = j / IP::IMG_WIDTH;
             int pixelCol = j % IP::IMG_HEIGHT;
             vector<double> convolutionInputs;
             for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
                 for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
-                    if (convRow == pixelRow && convCol == pixelCol)
-                        continue; // Skip pixel that we are trying to reconstruct
+                    // if (convRow == pixelRow && convCol == pixelCol)
+                    //     continue; // Skip pixel that we are trying to reconstruct
                     if (convRow < 0 || convRow >= width ||
                         convCol < 0 || convCol >= height) {
                         // We are off the image

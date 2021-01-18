@@ -6,7 +6,7 @@
 	</Algorithm>
 	<Genotype>
 		<Cartesian>
-			<Entry key="numvariables">9</Entry>
+			<Entry key="numvariables">25</Entry>
 			<Entry key="numoutputs">1</Entry>
 			<Entry key="numrows">40</Entry>
 			<Entry key="numcols">2</Entry>
@@ -20,7 +20,7 @@
 		<Entry key="mutation.indprob">0.1</Entry>
 
 		<Entry key="population.size">200</Entry>
-		<Entry key="term.maxgen">200</Entry>
+		<Entry key="term.maxgen">500</Entry>
 		<Entry key="term.fitnessval">0</Entry>
 		<Entry key="log.level">3</Entry>
 		<Entry key="log.frequency">5</Entry>
