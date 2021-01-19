@@ -39,8 +39,8 @@ Noised.txt
 Denoised.txt
 Original.txt
 info*.txt
-training-image.txt
-original-image.txt
+training-img.txt
+original-img.txt
 goal-img.txt
 generated-img.txt
 results.txt
