@@ -7,7 +7,7 @@
 #include <functional>
 #include "IP.h"
 
-/*void writeInfo(const char* fileName, vector<vector<double>> testData, StateP state, shared_ptr<Net> targetModel, int targetValue) {
+void writeInfo(const char* fileName, StateP state) {
     ofstream file;
     file.open(fileName);
 
@@ -37,9 +37,8 @@
     file << "lowest: " << lowest << endl;
     file << "highest: " << highest << endl;
 
-    //free(bestModel);
     file.close();
-}*/
+}
 
 int main(int argc, char** argv) {
     StateP state(new State);
@@ -54,13 +53,17 @@ int main(int argc, char** argv) {
     vector<IndividualP> best = state->getHoF()->getBest();
     cartesian::Cartesian* bestModel = (cartesian::Cartesian*) best[0]->getGenotype().get();
 
-    IP::writeToFile("Noised.txt", ipOp->training_data[0]);
+    IP::writeToFile("training-img.txt", ipOp->training_data[0]);
 
     vector<double> image = ipOp->training_data[0];
     vector<double> generatedImage;
-    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 3, 1.);
+    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 5, 1., 0.);
     IP::fixInvalidValues(generatedImage);
-    IP::writeToFile("Denoised.txt", generatedImage);
+    IP::writeToFile("generated-img.txt", generatedImage);
+
+    IP::writeToFile("goal-img.txt", ipOp->original_images[0]);
+
+    writeInfo("results.txt", state);
     
     //auto testData = IP::loadTargetData(5);
     //auto targetModel = ImageProcessingOp->targetModel;
@@ -78,7 +81,7 @@ int main(int argc, char** argv) {
 
     //// Write detailed info to file
     //int targetValue = 6;
-    //writeInfo("info1.txt", testData, state, targetModel, targetValue);
+    
 
     return 0;
 }
