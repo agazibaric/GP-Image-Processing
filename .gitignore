@@ -43,6 +43,7 @@ training-image.txt
 original-image.txt
 goal-img.txt
 generated-img.txt
+results.txt
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
