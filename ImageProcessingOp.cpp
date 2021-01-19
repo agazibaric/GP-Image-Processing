@@ -4,10 +4,10 @@ ImageProcessingOp::ImageProcessingOp(){}
 
 bool ImageProcessingOp::initialize(StateP)
 {
-	auto originalImage = IP::loadImageFromVector("./data/lenna-edges.txt");
+	auto originalImage = IP::loadImageFromVector("./data/lenna.txt");
 	//IP::scale(originalImage, 255);
 
-	auto trainingImage = IP::loadImageFromVector("./data/lenna.txt");
+	auto trainingImage = IP::loadImageFromVector("./data/lenna-noised.txt");
 
 	this->original_images.push_back(originalImage);
 	this->training_data.push_back(trainingImage);
@@ -29,7 +29,7 @@ FitnessP ImageProcessingOp::evaluate(IndividualP individual)
 		vector<double> image = training_data[i];
 		vector<double> generatedImage;
 
-		IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, cartesian, 7, percentage, offset_perc);
+		IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, cartesian, 5, percentage, offset_perc);
 
 		vector<double> result;
 		vector<double> original_image = this->original_images[i];

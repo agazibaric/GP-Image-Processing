@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 
     vector<double> image = ipOp->training_data[0];
     vector<double> generatedImage;
-    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 7, 1., 0.);
+    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 5, 1., 0.);
     IP::fixInvalidValues(generatedImage);
     IP::writeToFile("generated-img.txt", generatedImage);
 

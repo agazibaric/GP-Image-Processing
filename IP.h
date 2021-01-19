@@ -35,8 +35,8 @@ public:
             vector<double> convolutionInputs;
             for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
                 for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
-                    // if (convRow == pixelRow && convCol == pixelCol)
-                    //     continue; // Skip pixel that we are trying to reconstruct
+                    if (convRow == pixelRow && convCol == pixelCol)
+                        continue; // Skip pixel that we are trying to reconstruct
                     if (convRow < 0 || convRow >= width ||
                         convCol < 0 || convCol >= height) {
                         // We are off the image
