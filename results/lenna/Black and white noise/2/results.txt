@@ -1,0 +1,10 @@
+minFitness: 0.000220151
+maxFitness: 0.00101435
+average: 0.000234235
+stdDev: 9.99099e-05
+sampleSize: 100
+time: 8418
+evaluations: 200100
+generations: 200100
+lowest: 0.000220151
+highest: 0.302171
