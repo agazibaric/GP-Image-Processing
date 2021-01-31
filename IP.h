@@ -12,12 +12,6 @@ using namespace std;
 class IP
 {
 public:
-    static constexpr int IMG_WIDTH = 512;
-    static constexpr int IMG_HEIGHT = 512;
-
-    static constexpr double MIN_VALUE = 0;
-    static constexpr double MAX_VALUE = 255;
-
     static void convolution(vector<double> image, vector<double>& generatedImage, 
         int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, double percentage, double offset_perc) {
         int delta = convolutionSize / 2;;
@@ -30,8 +24,8 @@ public:
         }
 
         for (int j = imageOffset; j < N; j++) {
-            int pixelRow = j / IP::IMG_WIDTH;
-            int pixelCol = j % IP::IMG_HEIGHT;
+            int pixelRow = j / width;
+            int pixelCol = j % height;
             vector<double> convolutionInputs;
             for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
                 for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
@@ -44,7 +38,7 @@ public:
                     }
                     else {
                         // Find the correct pixel index
-                        int pixelIndex = convRow * IP::IMG_WIDTH + convCol;
+                        int pixelIndex = convRow * width + convCol;
                         convolutionInputs.push_back(image[pixelIndex]);
                     }
                 }
@@ -56,12 +50,10 @@ public:
         }
     }
 
-    static void fixInvalidValues(vector<double>& v) {
+    static void fixInvalidValues(vector<double>& v, double minValue, double maxValue) {
         for (int i = 0, n = v.size(); i < n; i++) {
-            /*v[i] = min(v[i], IP::MAX_VALUE);
-            v[i] = max(v[i], IP::MIN_VALUE);*/
-            v[i] = min(v[i], 255.);
-            v[i] = max(v[i], 0.);
+            v[i] = min(v[i], maxValue);
+            v[i] = max(v[i], minValue);
         }
     }
 
@@ -90,7 +82,6 @@ public:
     static vector<double> loadImageFromVector(const char* fileName) {
         vector<double> image;
         ifstream inputFile(fileName);
-        // test file open   
         double value;
         while (inputFile >> value) {
             image.push_back(value);

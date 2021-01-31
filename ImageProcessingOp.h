@@ -10,10 +10,19 @@ class ImageProcessingOp : public EvaluateOp
 {
 public:
 	ImageProcessingOp();
+	void registerParameters(StateP state);
 	FitnessP evaluate(IndividualP individual);
 	bool initialize(StateP);
 
-	vector<vector<double>> training_data;
-	vector<vector<double>> original_images;
+	vector<vector<double>> trainingImages;
+	vector<vector<double>> targetImages;
+	
+	int imageWidth;
+	int imageHeight;
+	double imageMaxValue;
+	double imageMinValue;
+	int convolutionSize;
+	double sizePercentage;
+	double offsetPercentage = 0.;
 };
 typedef boost::shared_ptr<ImageProcessingOp> ImageProcessingOpP;

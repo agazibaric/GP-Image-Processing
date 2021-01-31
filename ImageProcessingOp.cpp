@@ -2,15 +2,62 @@
 
 ImageProcessingOp::ImageProcessingOp(){}
 
-bool ImageProcessingOp::initialize(StateP)
+void ImageProcessingOp::registerParameters(StateP state)
 {
-	auto originalImage = IP::loadImageFromVector("./data/lenna.txt");
-	//IP::scale(originalImage, 255);
+	state->getRegistry()->registerEntry("convolutionSize", (voidP)(new int(3)), ECF::INT);
+	state->getRegistry()->registerEntry("sizePercentage", (voidP)(new double(0.01)), ECF::DOUBLE);
+	state->getRegistry()->registerEntry("imageWidth", (voidP)(new int(512)), ECF::INT);
+	state->getRegistry()->registerEntry("imageHeight", (voidP)(new int(512)), ECF::INT);
+	state->getRegistry()->registerEntry("imageMaxValue", (voidP)(new double(255)), ECF::DOUBLE);
+	state->getRegistry()->registerEntry("imageMinValue", (voidP)(new double(0)), ECF::DOUBLE);
+	state->getRegistry()->registerEntry("targetImgPath", (voidP)(new string("")), ECF::STRING);
+	state->getRegistry()->registerEntry("trainingImgPath", (voidP)(new string("")), ECF::STRING);
+}
 
-	auto trainingImage = IP::loadImageFromVector("./data/lenna-noised.txt");
+bool ImageProcessingOp::initialize(StateP state)
+{
+	std::stringstream ss;
+    std::string names, name;
+	voidP sptr;
+	
+	// Image parameters
+	sptr = state->getRegistry()->getEntry("imageWidth");
+	this->imageWidth = *((int*)sptr.get());
+	sptr = state->getRegistry()->getEntry("imageHeight");
+	this->imageHeight = *((int*)sptr.get());
+	sptr = state->getRegistry()->getEntry("imageMaxValue");
+	this->imageMaxValue = *((double*)sptr.get());
+	sptr = state->getRegistry()->getEntry("imageMinValue");
+	this->imageMinValue = *((double*)sptr.get());
+	sptr = state->getRegistry()->getEntry("convolutionSize");
+	this->convolutionSize = *((int*)sptr.get());
+	sptr = state->getRegistry()->getEntry("sizePercentage");
+	this->sizePercentage = *((double*)sptr.get());
+	
+	// Load target images
+	sptr = state->getRegistry()->getEntry("targetImgPath");
+    names = *((std::string*) sptr.get());
+    ss.str("");
+    ss.clear();
+    ss << names;
+    name="";
+    while(ss >> name) {
+		cout << name << endl;
+        auto targetImage = IP::loadImageFromVector(name.c_str());
+		this->targetImages.push_back(targetImage);
+    }
 
-	this->original_images.push_back(originalImage);
-	this->training_data.push_back(trainingImage);
+	// Load training images
+	sptr = state->getRegistry()->getEntry("trainingImgPath");
+    names = *((std::string*) sptr.get());
+    ss.str("");
+    ss.clear();
+    ss << names;
+    name="";
+    while(ss >> name) {
+        auto trainingImage = IP::loadImageFromVector(name.c_str());
+		this->trainingImages.push_back(trainingImage);
+    }
 
 	return true;
 }
@@ -21,34 +68,22 @@ FitnessP ImageProcessingOp::evaluate(IndividualP individual)
 	cartesian::Cartesian* cartesian = (cartesian::Cartesian*) individual->getGenotype().get();
 	FitnessP fitness(new FitnessMin);
 	double error = 0.;
-	double percentage = 0.01;
-	double offset_perc = 0.;
-
-	for (int i = 0, n = training_data.size(); i < n;  i++) {
-		
-		vector<double> image = training_data[i];
+	
+	for (int i = 0, n = trainingImages.size(); i < n;  i++) {
+		vector<double> image = trainingImages[i];
 		vector<double> generatedImage;
 
-		IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, cartesian, 5, percentage, offset_perc);
+		IP::convolution(image, generatedImage, this->imageWidth, this->imageHeight, cartesian,
+						this->convolutionSize, this->sizePercentage, this->offsetPercentage);
 
 		vector<double> result;
-		vector<double> original_image = this->original_images[i];
-		IP::fixInvalidValues(generatedImage);
+		vector<double> targetImage = this->targetImages[i];
+		IP::fixInvalidValues(generatedImage, this->imageMinValue, this->imageMaxValue);
 		for (int pixel = 0; pixel < generatedImage.size(); pixel++) {
-			result.push_back(original_image[pixel] - generatedImage[pixel]);
+			result.push_back(targetImage[pixel] - generatedImage[pixel]);
 		}
 
-		error += IP::euclideanNorm(result) / (IP::IMG_HEIGHT * IP::IMG_WIDTH * 255. * 255. * percentage);
-
-		// Black image 
-		//error -= 0.5 * (IP::euclideanNorm(generatedImage) / (784. * 255 * 255));
-
-		/*vector<double> difference;
-		for (int pixel = 0; pixel < image.size(); pixel++) {
-			difference.push_back(image[pixel] - generatedImage[pixel]);
-		}
-		error -= (IP::absoluteSum(difference) / (784. * 255 * 255));*/
-
+		error += IP::euclideanNorm(result) / (this->imageWidth * this->imageHeight * this->imageMaxValue * this->imageMaxValue * this->sizePercentage);
 		if (!std::isfinite(error)) {
 			error = 10e6;
 			break;

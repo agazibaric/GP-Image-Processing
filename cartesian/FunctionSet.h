@@ -24,6 +24,7 @@
 #include "Reciprical.h"
 #include "RSqrt.h"
 #include "Sigm.h"
+#include "Avg8.h"
 
 namespace cartesian{
     class FunctionSet{

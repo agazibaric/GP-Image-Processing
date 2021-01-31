@@ -12,22 +12,11 @@
 			<Entry key="numcols">2</Entry>
 			<Entry key="levelsback">50</Entry>
 			<Entry key="functionset">+ - * / sin cos nop sqrt exp step neg avg avg8 min max abs add ramp ceil floor frac rsqrt sq_exp rec</Entry>
-			<Entry key="constantset">0 1 -1 2 255 -255</Entry>
+			<Entry key="constantset">0 1 -1 255 -255</Entry>
 		</Cartesian>
 	</Genotype>
 
 	<Registry>
-		<Entry key="convolutionSize">5</Entry>
-		<Entry key="sizePercentage">0.01</Entry>
-
-		<Entry key="imageWidth">512</Entry>
-		<Entry key="imageHeight">512</Entry>
-		<Entry key="imageMinValue">0</Entry>
-		<Entry key="imageMaxValue">255</Entry>
-
-		<Entry key="targetImgPath">./data/lenna.txt</Entry>
-		<Entry key="trainingImgPath">./data/lenna-blured.txt</Entry>
-
 		<Entry key="mutation.indprob">0.1</Entry>
 		<Entry key="population.size">50</Entry>
 		<Entry key="term.maxgen">2000</Entry>
