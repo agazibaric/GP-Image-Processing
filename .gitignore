@@ -33,7 +33,7 @@ bld/
 [Ll]ogs/
 build/
 
-# Posible local generated files
+# Posible locally generated files
 log.txt
 Noised.txt
 Denoised.txt
@@ -42,8 +42,12 @@ info*.txt
 training-img.txt
 original-img.txt
 goal-img.txt
+target-img.txt
 generated-img.txt
 results.txt
+
+# VS Code
+.vscode/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

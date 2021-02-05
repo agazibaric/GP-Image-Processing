@@ -9,59 +9,62 @@
 
 using namespace std;
 
+/**
+ * Image Processing
+ */
 class IP
 {
 public:
-    static constexpr int IMG_WIDTH = 512;
-    static constexpr int IMG_HEIGHT = 512;
-
-    static constexpr double MIN_VALUE = 0;
-    static constexpr double MAX_VALUE = 255;
-
     static void convolution(vector<double> image, vector<double>& generatedImage, 
-        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, double percentage, double offset_perc) {
-        int delta = convolutionSize / 2;;
+        int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, double percentage, int includeCentralPixel) {
+        int delta = convolutionSize / 2;
         int imageSize = (int)(image.size() * percentage);
-        int imageOffset = (int)(image.size() * offset_perc);
 
-        int N = imageOffset + imageSize;
-        if (N > image.size()) {
-            N = image.size();
-        }
+        // Calculate row shift for given image size percentage
+        int nRows = imageSize / width;
+        int rowDelta = height / nRows;
 
-        for (int j = imageOffset; j < N; j++) {
-            int pixelRow = j / IP::IMG_WIDTH;
-            int pixelCol = j % IP::IMG_HEIGHT;
-            vector<double> convolutionInputs;
-            for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
-                for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
-                    if (convRow == pixelRow && convCol == pixelCol)
-                        continue; // Skip pixel that we are trying to reconstruct
-                    if (convRow < 0 || convRow >= width ||
-                        convCol < 0 || convCol >= height) {
-                        // We are off the image
-                        convolutionInputs.push_back(0);
-                    }
-                    else {
-                        // Find the correct pixel index
-                        int pixelIndex = convRow * IP::IMG_WIDTH + convCol;
-                        convolutionInputs.push_back(image[pixelIndex]);
-                    }
-                }
+        for (int row = 0; row < nRows; row++) {
+            int pixelRow = row * rowDelta;
+            int nCols = width;
+
+            // If it's last row, calculate number of columns
+            if (row == nRows - 1 && percentage < 1.) {
+                nCols = imageSize - nRows * width;
             }
 
-            vector<double> result;
-            cartesian->evaluate(convolutionInputs, result);
-            generatedImage.push_back(result[0]);
+            // Convolution window
+            for (int pixelCol = 0; pixelCol < nCols; pixelCol++) {
+                vector<double> convolutionInputs;
+                for (int convRow = pixelRow - delta; convRow <= pixelRow + delta; convRow++) {
+                    for (int convCol = pixelCol - delta; convCol <= pixelCol + delta; convCol++) {
+                        if (!includeCentralPixel && convRow == pixelRow && convCol == pixelCol)
+                            continue; // Skip central pixel
+                        if (convRow < 0 || convRow >= width ||
+                            convCol < 0 || convCol >= height) {
+                            // We are off the image, add padding with zeros
+                            convolutionInputs.push_back(0);
+                        }
+                        else {
+                            // Find the correct pixel index
+                            int pixelIndex = convRow * width + convCol;
+                            convolutionInputs.push_back(image[pixelIndex]);
+                        }
+                    }
+                }
+
+                vector<double> result;
+                cartesian->evaluate(convolutionInputs, result);
+                generatedImage.push_back(result[0]);
+            }
+
         }
     }
 
-    static void fixInvalidValues(vector<double>& v) {
+    static void fixInvalidValues(vector<double>& v, double minValue, double maxValue) {
         for (int i = 0, n = v.size(); i < n; i++) {
-            /*v[i] = min(v[i], IP::MAX_VALUE);
-            v[i] = max(v[i], IP::MIN_VALUE);*/
-            v[i] = min(v[i], 255.);
-            v[i] = max(v[i], 0.);
+            v[i] = min(v[i], maxValue);
+            v[i] = max(v[i], minValue);
         }
     }
 
@@ -90,7 +93,6 @@ public:
     static vector<double> loadImageFromVector(const char* fileName) {
         vector<double> image;
         ifstream inputFile(fileName);
-        // test file open   
         double value;
         while (inputFile >> value) {
             image.push_back(value);
