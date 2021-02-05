@@ -53,35 +53,16 @@ int main(int argc, char** argv) {
     vector<IndividualP> best = state->getHoF()->getBest();
     cartesian::Cartesian* bestModel = (cartesian::Cartesian*) best[0]->getGenotype().get();
 
-    IP::writeToFile("training-img.txt", ipOp->training_data[0]);
-
-    vector<double> image = ipOp->training_data[0];
+    vector<double> image = ipOp->trainingImages[0];
     vector<double> generatedImage;
-    IP::convolution(image, generatedImage, IP::IMG_WIDTH, IP::IMG_HEIGHT, bestModel, 5, 1., 0.);
-    IP::fixInvalidValues(generatedImage);
-    IP::writeToFile("generated-img.txt", generatedImage);
+    IP::convolution(image, generatedImage, ipOp->imageWidth, ipOp->imageHeight, bestModel, ipOp->convolutionSize, 1., 0.);
+    IP::fixInvalidValues(generatedImage, ipOp->imageMinValue, ipOp->imageMaxValue);
 
-    IP::writeToFile("goal-img.txt", ipOp->original_images[0]);
+    IP::writeToFile("training-img.txt", ipOp->trainingImages[0]);
+    IP::writeToFile("generated-img.txt", generatedImage);
+    IP::writeToFile("target-img.txt", ipOp->targetImages[0]);
 
     writeInfo("results.txt", state);
     
-    //auto testData = IP::loadTargetData(5);
-    //auto targetModel = ImageProcessingOp->targetModel;
-    //
-    //auto originalImg = testData[1];
-    //vector<double> filter;
-    //bestModel->evaluate(originalImg, filter);
-    //vector<double> adversarialImage = IP::combine(originalImg, filter);
-    //IP::fixInvalidValues(adversarialImage);
-    //torch::Tensor tensorAdversarialImg = IP::vectorToTensor(adversarialImage);
-    //torch::Tensor normTensorAdversarialImg = IP::unNormalize(tensorAdversarialImg);
-
-    //// Write adversarial img to file
-    //IP::writeToFile("advImg10.txt", IP::tensorToVector(normTensorAdversarialImg));
-
-    //// Write detailed info to file
-    //int targetValue = 6;
-    
-
     return 0;
 }

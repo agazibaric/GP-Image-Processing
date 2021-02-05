@@ -78,6 +78,9 @@ namespace cartesian{
 
         function = (FunctionP_basic)(new Ramp<std::vector<double>, double>);
         mAllFunctions_.insert(std::make_pair(function->getName(), function));
+
+        function = (FunctionP_basic)(new Avg8<std::vector<double>, double>);
+        mAllFunctions_.insert(std::make_pair(function->getName(), function));
         return true;
     }
 
