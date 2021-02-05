@@ -17,20 +17,19 @@
 	</Genotype>
 
 	<Registry>
-		<Entry key="convolutionSize">5</Entry>
-		<Entry key="sizePercentage">0.01</Entry>
-
 		<Entry key="imageWidth">512</Entry>
 		<Entry key="imageHeight">512</Entry>
 		<Entry key="imageMinValue">0</Entry>
 		<Entry key="imageMaxValue">255</Entry>
-
+		<Entry key="convolutionSize">5</Entry>
+		<Entry key="sizePercentage">0.02</Entry>
 		<Entry key="targetImgPath">./data/lenna.txt</Entry>
-		<Entry key="trainingImgPath">./data/lenna-blured.txt</Entry>
+		<Entry key="trainingImgPath">./data/lenna-noised.txt</Entry>
+		<Entry key="includeCentralPixel">0</Entry>
 
 		<Entry key="mutation.indprob">0.1</Entry>
-		<Entry key="population.size">50</Entry>
-		<Entry key="term.maxgen">2000</Entry>
+		<Entry key="population.size">100</Entry>
+		<Entry key="term.maxgen">1000</Entry>
 		<Entry key="term.fitnessval">0</Entry>
 		<Entry key="log.level">3</Entry>
 		<Entry key="log.frequency">5</Entry>

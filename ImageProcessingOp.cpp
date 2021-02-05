@@ -12,6 +12,7 @@ void ImageProcessingOp::registerParameters(StateP state)
 	state->getRegistry()->registerEntry("imageMinValue", (voidP)(new double(0)), ECF::DOUBLE);
 	state->getRegistry()->registerEntry("targetImgPath", (voidP)(new string("")), ECF::STRING);
 	state->getRegistry()->registerEntry("trainingImgPath", (voidP)(new string("")), ECF::STRING);
+	state->getRegistry()->registerEntry("includeCentralPixel", (voidP)(new int(1)), ECF::INT);
 }
 
 bool ImageProcessingOp::initialize(StateP state)
@@ -29,12 +30,16 @@ bool ImageProcessingOp::initialize(StateP state)
 	this->imageMaxValue = *((double*)sptr.get());
 	sptr = state->getRegistry()->getEntry("imageMinValue");
 	this->imageMinValue = *((double*)sptr.get());
+
+	// Convolution parameters
 	sptr = state->getRegistry()->getEntry("convolutionSize");
 	this->convolutionSize = *((int*)sptr.get());
 	sptr = state->getRegistry()->getEntry("sizePercentage");
 	this->sizePercentage = *((double*)sptr.get());
-	
-	// Load target images
+	sptr = state->getRegistry()->getEntry("includeCentralPixel");
+	this->includeCentralPixel = *((int*)sptr.get());
+
+	// Target images
 	sptr = state->getRegistry()->getEntry("targetImgPath");
     names = *((std::string*) sptr.get());
     ss.str("");
@@ -47,7 +52,7 @@ bool ImageProcessingOp::initialize(StateP state)
 		this->targetImages.push_back(targetImage);
     }
 
-	// Load training images
+	// Training images
 	sptr = state->getRegistry()->getEntry("trainingImgPath");
     names = *((std::string*) sptr.get());
     ss.str("");
@@ -70,10 +75,10 @@ FitnessP ImageProcessingOp::evaluate(IndividualP individual)
 	double error = 0.;
 	
 	for (int i = 0, n = trainingImages.size(); i < n;  i++) {
-		vector<double> image = trainingImages[i];
+		vector<double> trainingImage = trainingImages[i];
 		vector<double> generatedImage;
 
-		IP::convolution(image, generatedImage, this->imageWidth, this->imageHeight, cartesian,
+		IP::convolution(trainingImage, generatedImage, this->imageWidth, this->imageHeight, cartesian,
 						this->convolutionSize, this->sizePercentage, this->offsetPercentage);
 
 		vector<double> result;

@@ -16,13 +16,14 @@ public:
 
 	vector<vector<double>> trainingImages;
 	vector<vector<double>> targetImages;
-	
+
 	int imageWidth;
 	int imageHeight;
 	double imageMaxValue;
 	double imageMinValue;
 	int convolutionSize;
 	double sizePercentage;
+	int includeCentralPixel;
 	double offsetPercentage = 0.;
 };
 typedef boost::shared_ptr<ImageProcessingOp> ImageProcessingOpP;
