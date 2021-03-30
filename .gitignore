@@ -39,12 +39,13 @@ Noised.txt
 Denoised.txt
 Original.txt
 info*.txt
-training-img.txt
-original-img.txt
-goal-img.txt
-target-img.txt
-generated-img.txt
-results.txt
+goal*
+results*
+training*
+generated*
+original*
+validation*
+target*
 
 # VS Code
 .vscode/

@@ -6,6 +6,8 @@
 #include <fstream>
 
 #include <boost/algorithm/string.hpp>
+#include "./utility/utilityrng.h"
+#include "ConvolutionParams.h"
 
 using namespace std;
 
@@ -15,7 +17,8 @@ using namespace std;
 class IP
 {
 public:
-    static void convolution(vector<double> image, vector<double>& generatedImage, 
+
+    static void convolution2(vector<double> image, vector<double>& generatedImage, 
         int width, int height, cartesian::Cartesian* cartesian, int convolutionSize, double percentage, int includeCentralPixel) {
         int delta = convolutionSize / 2;
         int imageSize = (int)(image.size() * percentage);
@@ -61,8 +64,111 @@ public:
         }
     }
 
+    static void convolution(vector<double> image, vector<double>& generatedImage, cartesian::Cartesian* cartesian, ConvolutionParamsP params) {
+        // Submatrix passage
+        for (int pixelRow = params->rowStart, M = params->rowStart + params->nRows; pixelRow < M; pixelRow++) {            
+            for (int pixelCol = params->colStart, N = params->colStart + params->nCols; pixelCol < N; pixelCol++) {
+                vector<double> convolutionInputs;
+
+                // Convolution window
+                for (int convRow = pixelRow - params->delta, m = pixelRow + params->delta; convRow <= m; convRow++) {
+                    for (int convCol = pixelCol - params->delta, n = pixelCol + params->delta; convCol <= n; convCol++) {
+                        if (!params->includeCentralPixel && convRow == pixelRow && convCol == pixelCol)
+                            continue; // Skip central pixel
+                        if (convRow < 0 || convRow >= params->width ||
+                            convCol < 0 || convCol >= params->height) {
+                            // We are off the image, add padding with zeros
+                            convolutionInputs.push_back(0);
+                        }
+                        else {
+                            // Find the correct pixel index
+                            int pixelIndex = convRow * params->width + convCol;
+                            convolutionInputs.push_back(image[pixelIndex]);
+                        }
+                    }
+                }
+
+                vector<double> result;
+                cartesian->evaluate(convolutionInputs, result);
+                generatedImage.push_back(abs(result[0]));
+            }
+
+        }
+    }
+
+    static void getConvolutionInputs2(vector<double> image, vector<vector<double>>& convolutionInputs, ConvolutionParamsP params) {
+        for (int j = 0; j < params->imageSize; j++) {
+            int pixelRow = j / params->width;
+            int pixelCol = j % params->height;
+            vector<double> convolutionInput;
+            for (int convRow = pixelRow - params->delta; convRow <= pixelRow + params->delta; convRow++) {
+                for (int convCol = pixelCol - params->delta; convCol <= pixelCol + params->delta; convCol++) {
+                    if (convRow == pixelRow && convCol == pixelCol)
+                        continue; // Skip pixel that we are trying to reconstruct
+                    if (convRow < 0 || convRow >= params->width ||
+                        convCol < 0 || convCol >= params->height) {
+                        // We are off the image
+                        convolutionInput.push_back(0);
+                    }
+                    else {
+                        // Find the correct pixel index
+                        int pixelIndex = convRow * params->width + convCol;
+                        convolutionInput.push_back(image[pixelIndex]);
+                    }
+                }
+            }
+            convolutionInputs.push_back(convolutionInput);
+        }
+    }
+
+    static void getConvolutionInputs(vector<double> image, vector<vector<double>>& convolutionInputs, ConvolutionParamsP params) {
+        // Submatrix passage
+        for (int pixelRow = params->rowStart, M = params->rowStart + params->nRows; pixelRow < M; pixelRow++) {          
+            for (int pixelCol = params->colStart, N = params->colStart + params->nCols; pixelCol < N; pixelCol++) {
+                vector<double> convolutionInput;
+
+                // Convolution window
+                for (int convRow = pixelRow - params->delta, m = pixelRow + params->delta; convRow <= m; convRow++) {
+                    for (int convCol = pixelCol - params->delta, n = pixelCol + params->delta; convCol <= n; convCol++) {
+                        if (!params->includeCentralPixel && convRow == pixelRow && convCol == pixelCol)
+                            continue; // Skip central pixel
+                        if (convRow < 0 || convRow >= params->width ||
+                            convCol < 0 || convCol >= params->height) {
+                            // We are off the image, add padding with zeros
+                            convolutionInput.push_back(0);
+                        }
+                        else {
+                            // Find the correct pixel index
+                            int pixelIndex = convRow * params->width + convCol;
+                            convolutionInput.push_back(image[pixelIndex]);
+                        }
+                    }
+                }
+
+                convolutionInputs.push_back(convolutionInput);
+            }
+
+        }
+    }
+
+    static void getTagretImageConvolutionPixels(vector<double> image, vector<double>& result, ConvolutionParamsP params) {
+        for (int pixelRow = params->rowStart, M = params->rowStart + params->nRows; pixelRow < M; pixelRow++) {          
+            for (int pixelCol = params->colStart, N = params->colStart + params->nCols; pixelCol < N; pixelCol++) {
+                int pixelIndex = pixelRow * params->width + pixelCol;
+                result.push_back(image[pixelIndex]);
+            }
+        }
+    }
+
+    static void getTagretImageConvolutionPixels2(vector<double> image, vector<double>& result, ConvolutionParamsP params) {
+        for (int i = 0; i < params->imageSize; i++) {
+            result.push_back(image[i]);
+        }
+    }
+
     static void fixInvalidValues(vector<double>& v, double minValue, double maxValue) {
         for (int i = 0, n = v.size(); i < n; i++) {
+            v[i] = round(v[i]);
             v[i] = min(v[i], maxValue);
             v[i] = max(v[i], minValue);
         }

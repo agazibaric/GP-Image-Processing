@@ -321,6 +321,53 @@ void Cartesian::buildRandomGenome()
     }
 }
 
+std::string Cartesian::toStringActiveNodes(uint output_number)
+{
+//    for(uint i = 0; i < this->size(); i++) {
+//        std::cout << this->operator[](i) << ' ';
+//    }
+    std::stringstream ss;
+    const auto& vRef = functionSet_->vActiveFunctions_;
+    std::deque<uint> working_deque;
+    uint start_index = this->size() - nOutputs + output_number;
+    uint start_value = this->operator[](start_index).value;
+    working_deque.push_back(start_value);
+//    std::cout << "start_index: " << start_index << " " << start_value << '\n';
+//    std::cout << "nInputs: " << nInputs << '\n';
+    while(!working_deque.empty()) {
+        uint working_index = working_deque.front();
+//        std::cout << "wotking index: " << working_index << '\n';
+        working_deque.pop_front();
+        if(working_index >= nInputs) {
+//            std::cout << "U trail stavio: " << (working_index - nInputs) << '\n';
+            const auto& gene = this->at(working_index - nInputs);
+            ss << vRef[gene.value]->getName() << "(";
+            
+            if(gene.isOutput) {
+                std::cout << "Something went wrong. Trail is considering an output index.\n";
+            }
+            for(const auto& elem : gene.inputConnections) {
+//                std::cout << "\t\tPlacing element: " << elem << '\n';
+                ss << elem << ", ";
+                working_deque.push_back(elem);
+            }
+            ss << ")" << std::endl;
+        }
+    }
+    return "TODO: ss to string";
+}
+
+std::string Cartesian::toStringAllActiveNodes()
+{
+    std::stringstream ss;
+    ss.str("");
+    ss.clear();
+    for(uint i = 0; i < nOutputs; i++) {
+        ss << toStringActiveNodes(i);
+    }
+    return "TODO";
+}
+
 
 void Cartesian::evaluate(const std::vector<double> &inputData, std::vector<double> &results)
 {

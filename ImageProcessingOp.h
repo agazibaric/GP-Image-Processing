@@ -16,6 +16,13 @@ public:
 
 	vector<vector<double>> trainingImages;
 	vector<vector<double>> targetImages;
+	vector<vector<double>> validationImages;
+
+	ConvolutionParamsP params;
+	// Precalculated values for inputs
+	vector<vector<vector<double>>> convolutionInputsForImages;
+	// Precalculated target values
+	vector<vector<double>> targetImagesConvolutionPixels;
 
 	int imageWidth;
 	int imageHeight;

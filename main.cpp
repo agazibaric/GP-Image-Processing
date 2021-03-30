@@ -53,14 +53,43 @@ int main(int argc, char** argv) {
     vector<IndividualP> best = state->getHoF()->getBest();
     cartesian::Cartesian* bestModel = (cartesian::Cartesian*) best[0]->getGenotype().get();
 
-    vector<double> image = ipOp->trainingImages[0];
-    vector<double> generatedImage;
-    IP::convolution(image, generatedImage, ipOp->imageWidth, ipOp->imageHeight, bestModel, ipOp->convolutionSize, 1., 0.);
-    IP::fixInvalidValues(generatedImage, ipOp->imageMinValue, ipOp->imageMaxValue);
+    ipOp->params->percentage = 1.;
+    ipOp->params->nRows = ipOp->params->height;
+    ipOp->params->nCols = ipOp->params->width;
+    ipOp->params->rowStart = 0;
+    ipOp->params->colStart = 0;
 
-    IP::writeToFile("training-img.txt", ipOp->trainingImages[0]);
-    IP::writeToFile("generated-img.txt", generatedImage);
-    IP::writeToFile("target-img.txt", ipOp->targetImages[0]);
+    IP::writeToFile("conv-target.txt", ipOp->targetImagesConvolutionPixels[0]);
+    IP::writeToFile("conv-training.txt", ipOp->convolutionInputsForImages[0][20]);
+
+    // Training images
+    for (int i = 0; i < ipOp->trainingImages.size(); i++) {
+        vector<double> image = ipOp->trainingImages[i];
+        vector<double> generatedImage;
+
+        IP::convolution(image, generatedImage, bestModel, ipOp->params);
+        IP::fixInvalidValues(generatedImage, ipOp->imageMinValue, ipOp->imageMaxValue);
+
+        string trainingName = "training-img" + std::to_string(i) + ".txt";
+        string generatedName = "generated-img" + std::to_string(i) + ".txt";
+        string targetName = "target-img" + std::to_string(i) + ".txt";
+        IP::writeToFile(trainingName.c_str(), ipOp->trainingImages[i]);
+        IP::writeToFile(generatedName.c_str(), generatedImage);
+        IP::writeToFile(targetName.c_str(), ipOp->targetImages[i]);
+    }
+
+    // Validation images
+    for (int i = 0; i < ipOp->validationImages.size(); i++) {
+        vector<double> image = ipOp->validationImages[i];
+        vector<double> generatedImage;
+
+        IP::convolution(image, generatedImage, bestModel, ipOp->params);
+        IP::fixInvalidValues(generatedImage, ipOp->imageMinValue, ipOp->imageMaxValue);
+
+        string validationName = "validation-img" + std::to_string(i) + ".txt";
+
+        IP::writeToFile(validationName.c_str(), generatedImage);
+    }
 
     writeInfo("results.txt", state);
     

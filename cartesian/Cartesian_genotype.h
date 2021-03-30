@@ -83,6 +83,9 @@ namespace cartesian
         */
         void evaluate(const vector<double>& inputData, vector<double>& results);
 
+        std::string toStringActiveNodes(uint output_number);
+        std::string toStringAllActiveNodes();
+
     public:
         StateP state_;					//!< local copy of state
 
