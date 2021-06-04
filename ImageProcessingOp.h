@@ -32,5 +32,6 @@ public:
 	double sizePercentage;
 	int includeCentralPixel;
 	double offsetPercentage = 0.;
+	int errorPower;
 };
 typedef boost::shared_ptr<ImageProcessingOp> ImageProcessingOpP;
