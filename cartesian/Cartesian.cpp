@@ -30,12 +30,12 @@ std::vector<CrossoverOpP> Cartesian::getCrossoverOp()
 std::vector<MutationOpP> Cartesian::getMutationOp()
 {
     std::vector<MutationOpP> mutationOperators;
-    /*mutationOperators.emplace_back((MutationOpP) (new MutateFunction));
+    mutationOperators.emplace_back((MutationOpP) (new MutateFunction));
     mutationOperators.emplace_back((MutationOpP) (new MutateFunctionSilent));
-    mutationOperators.emplace_back((MutationOpP) (new MutateFunctionSwap));*/
+    mutationOperators.emplace_back((MutationOpP) (new MutateFunctionSwap));
     mutationOperators.emplace_back((MutationOpP) (new MutateConnection));
-    /*mutationOperators.emplace_back((MutationOpP) (new MutateConnectionSilent));
-    mutationOperators.emplace_back((MutationOpP) (new MutateIntoSilent));*/
+    mutationOperators.emplace_back((MutationOpP) (new MutateConnectionSilent));
+    mutationOperators.emplace_back((MutationOpP) (new MutateIntoSilent));
     return mutationOperators;
 }
 
