@@ -34,7 +34,7 @@ bld/
 build/
 
 # Posible locally generated files
-log.txt
+log*.txt
 Noised.txt
 Denoised.txt
 Original.txt
