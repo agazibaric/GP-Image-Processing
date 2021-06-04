@@ -182,6 +182,18 @@ public:
         return result;
     }
 
+    static double calculateError(vector<double> generatedImage, vector<double> targetImage, int power) {
+        vector<double> difference;
+        for (int pixel = 0, k = generatedImage.size(); pixel < k; pixel++) {
+			difference.push_back(targetImage[pixel] - generatedImage[pixel]);
+		}
+        double result = 0;
+        for (double value : difference) {
+            result += pow(abs(value), power);
+        }
+        return result;
+    }
+
     static double absoluteSum(vector<double> v) {
         double result = 0;
         for (double value : v) {
