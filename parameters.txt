@@ -1,18 +1,18 @@
 <ECF>
 	<Algorithm>
 		<SteadyStateTournament>
-			<Entry key="tsize">3</Entry>
-		</SteadyStateTournament>
+                <Entry key="tsize">3</Entry>
+        </SteadyStateTournament>
 	</Algorithm>
 	<Genotype>
 		<Cartesian>
-			<Entry key="numvariables">24</Entry>
+			<Entry key="numvariables">9</Entry>
 			<Entry key="numoutputs">1</Entry>
-			<Entry key="numrows">50</Entry>
-			<Entry key="numcols">2</Entry>
-			<Entry key="levelsback">50</Entry>
-			<Entry key="functionset">+ - * / sin cos nop ln sqrt exp step neg avg avg8 min max abs ramp ceil floor frac rsqrt sq_exp rec</Entry>
-			<Entry key="constantset">0 1 -1 2 255 -255</Entry>
+			<Entry key="numrows">10</Entry>
+			<Entry key="numcols">3</Entry>
+			<Entry key="levelsback">2</Entry>
+			<Entry key="functionset">+ - * / sqrt avg8 min8 max8 min max avg step ramp sigm rec neg</Entry>
+			<Entry key="constantset">0 1 -1 255</Entry>
 		</Cartesian>
 	</Genotype>
 
@@ -21,19 +21,22 @@
 		<Entry key="imageHeight">256</Entry>
 		<Entry key="imageMinValue">0</Entry>
 		<Entry key="imageMaxValue">255</Entry>
-		<Entry key="convolutionSize">5</Entry>
-		<Entry key="sizePercentage">0.03</Entry>
-		<Entry key="targetImgPath">./data/original/lenna.txt ./data/original/cameraman.txt ./data/original/peppers.txt</Entry>
-		<Entry key="trainingImgPath">./data/noise/lenna-noised.txt ./data/noise/cameraman-noised.txt ./data/noise/peppers-noised.txt</Entry>
-		<Entry key="validationImgPath">./data/noise/house-noised.txt ./data/noise/lake-noised.txt ./data/noise/jetplane-noised.txt ./data/noise/livingroom-noised.txt ./data/noise/pirate-noised.txt ./data/noise/mandril-noised.txt ./data/noise/walkbridge-noised.txt ./data/noise/woman_blonde-noised.txt</Entry>
-		<Entry key="includeCentralPixel">0</Entry>
+		<Entry key="convolutionSize">3</Entry>
+		<Entry key="sizePercentage">0.04</Entry>
+		<Entry key="targetImgPath">./data/original/lenna-original.txt ./data/original/peppers-original.txt</Entry>
+		<Entry key="trainingImgPath">./data/inpaintingHard/lenna-inpaintingHard.txt ./data/inpaintingHard/peppers-inpaintingHard.txt</Entry>
+		<Entry key="validationImgPath">./data/inpaintingHard/house-inpaintingHard.txt ./data/inpaintingHard/lake-inpaintingHard.txt ./data/inpaintingHard/jetplane-inpaintingHard.txt ./data/inpaintingHard/livingroom-inpaintingHard.txt ./data/inpaintingHard/pirate-inpaintingHard.txt ./data/inpaintingHard/mandril-inpaintingHard.txt ./data/inpaintingHard/walkbridge-inpaintingHard.txt ./data/inpaintingHard/woman_blonde-inpaintingHard.txt</Entry>
+		<Entry key="includeCentralPixel">1</Entry>
+		<Entry key="errorPower">1</Entry>
 
 		<Entry key="mutation.indprob">0.1</Entry>
-		<Entry key="population.size">100</Entry>
-		<Entry key="term.maxgen">100</Entry>
+		<Entry key="population.size">1000</Entry>
+		<Entry key="term.maxgen">3000</Entry>
+		<Entry key="term.stagnation">500</Entry>
 		<Entry key="term.fitnessval">0</Entry>
 		<Entry key="log.level">3</Entry>
-		<Entry key="log.frequency">10</Entry>
+		<Entry key="log.frequency">50</Entry>
 		<Entry key="log.filename">log.txt</Entry>
+		<Entry key="batch.repeats">5</Entry>
 	</Registry>
 </ECF>
