@@ -81,6 +81,15 @@ namespace cartesian{
 
         function = (FunctionP_basic)(new Avg8<std::vector<double>, double>);
         mAllFunctions_.insert(std::make_pair(function->getName(), function));
+
+        function = (FunctionP_basic)(new Min8<std::vector<double>, double>);
+        mAllFunctions_.insert(std::make_pair(function->getName(), function));
+
+        function = (FunctionP_basic)(new Max8<std::vector<double>, double>);
+        mAllFunctions_.insert(std::make_pair(function->getName(), function));
+
+        function = (FunctionP_basic)(new Med8<std::vector<double>, double>);
+        mAllFunctions_.insert(std::make_pair(function->getName(), function));
         return true;
     }
 

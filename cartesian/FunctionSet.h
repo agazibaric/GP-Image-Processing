@@ -25,6 +25,9 @@
 #include "RSqrt.h"
 #include "Sigm.h"
 #include "Avg8.h"
+#include "Min8.h"
+#include "Max8.h"
+#include "Med8.h"
 
 namespace cartesian{
     class FunctionSet{
